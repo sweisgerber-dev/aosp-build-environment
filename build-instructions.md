@@ -11,7 +11,7 @@
 
 
 ```bash
-docker build -t android-aosp-6.0-marshmallow:latest .
+docker build -t aosp-build-environment:latest .
 ```
 
 OR execute the `build.sh` script.
@@ -23,11 +23,11 @@ OR execute the `build.sh` script.
 ```bash
 docker run -ti \
     --hostname aosp-6-0 \
-    --volume /home/weisgerber/mount/colossus04/weisgerber/aosp/aosp_6.0.1_r62_arm-eng:/aosp/aosp-6.0 \
+    --volume /HOST/PATH/TO/ANDROID/CHECKOUT:/aosp/android-VERSION \
     -e LOCAL_USER_ID=`id -u $USER` \
     -e LOCAL_GROUP_ID=`id -g $USER` \
-    -e GIT_USER_NAME="Sebastian" \
-    -e GIT_USER_EMAIL="weisgerber@cispa.saarland" \
+    -e GIT_USER_NAME="USERNAME" \
+    -e GIT_USER_EMAIL="user@example.org" \
     aosp-build-environment:latest
 ```
 
@@ -36,7 +36,7 @@ OR modify the `run.sh` script.
 ### AOSP Build in DOCKER Container
 
 
-> Commands to acquire the sources and build Android
+> Commands to acquire the sources and build Android, e.g.:
 
 
 ```bash
