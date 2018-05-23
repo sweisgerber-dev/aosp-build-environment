@@ -1,11 +1,6 @@
 # AOSP Docker Build Environment
 
-## Support 
-
->Currently supported versions:
-
-- AOSP 6.0 Marshmallow
-
+> [DockerHub](https://hub.docker.com/r/sweisgerber/aosp-build-environment/)
 
 # Build DOCKER Container
 
@@ -33,7 +28,7 @@ docker run -ti \
 
 OR modify the `run.sh` script.
 
-### AOSP Build in DOCKER Container
+## AOSP Build in DOCKER Container
 
 
 > Commands to acquire the sources and build Android, e.g.:
