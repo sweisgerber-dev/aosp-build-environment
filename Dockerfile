@@ -85,10 +85,6 @@ RUN curl http://old-releases.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk
 
 # Install the missing dependencies we enforced with `|| true`
 RUN apt-get -f install -y
-# Delete install artifacts
-RUN rm openjdk-8-jre-headless_amd64.deb \
-    && rm openjdk-8-jre-headless_amd64.deb \
-    && rm openjdk-8-jdk_amd64.deb
 #
 # Update the default Java version - optional
 #
