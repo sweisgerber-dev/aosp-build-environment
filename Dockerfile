@@ -14,6 +14,8 @@ ENV USER_ID_DEFAULT=1000
 ENV GROUP_ID_DEFAULT=1000
 ENV WORKDIR=/aosp
 
+ENV JAVA_VERSION=8u45-b14-1
+
 MAINTAINER Sebastian Weisgerber <sweisgerber.dev@gmail.com>
 
 # See https://github.com/docker/docker/issues/4032
@@ -28,6 +30,7 @@ RUN apt-get update && apt-get install -y \
     bison \
     build-essential \
     ca-certificates \
+    ca-certificates-java \
     ccache \
     curl \
     flex \
@@ -63,34 +66,52 @@ RUN apt-get update && apt-get install -y \
 # RUN apt-get -y install openjdk-8-jdk
 #
 # To develop older versions of Android, download and install the corresponding version of the Java JDK:
-#
+# - Java 8: for Nougat onwards
 # - Java 7: for Lollipop through Marshmallow
 # - Java 6: for Gingerbread through KitKat
 # - Java 5: for Cupcake through Froyo
 #
-RUN apt-get update && apt-get install -y openjdk-7-jdk
+RUN curl http://old-releases.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk-8-jre-headless_${JAVA_VERSION}_amd64.deb \
+       --output openjdk-8-jre-headless_amd64.deb \
+    && dpkg -i openjdk-8-jre-headless_amd64.deb || true
+
+RUN curl http://old-releases.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk-8-jre_${JAVA_VERSION}_amd64.deb \
+       --output openjdk-8-jre_amd64.deb \
+    && dpkg -i openjdk-8-jre_amd64.deb || true
+
+RUN curl http://old-releases.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk-8-jdk_${JAVA_VERSION}_amd64.deb \
+       --output openjdk-8-jdk_amd64.deb \
+    && dpkg -i openjdk-8-jdk_amd64.deb || true
+
+# Install the missing dependencies we enforced with `|| true`
+RUN apt-get -f install -y
+# Delete install artifacts
+RUN rm openjdk-8-jre-headless_amd64.deb \
+    && rm openjdk-8-jre-headless_amd64.deb \
+    && rm openjdk-8-jdk_amd64.deb
 #
 # Update the default Java version - optional
 #
+
 RUN update-alternatives --config java \
     && update-alternatives --config javac
 
 # Add "gosu" tool ######################################################################################################
 RUN set -ex; \
-	\
-	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-	curl -o /usr/local/bin/gosu     -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-	curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-	\
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
-	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-	rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
-	\
-	chmod +x /usr/local/bin/gosu; \
-	gosu nobody true; \
-	\
-	apt-get purge -y --auto-remove $fetchDeps
+    \
+    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+    curl -o /usr/local/bin/gosu     -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+    curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+    \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+    gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+    rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+    \
+    chmod +x /usr/local/bin/gosu; \
+    gosu nobody true; \
+    \
+    apt-get purge -y --auto-remove $fetchDeps
 
 # Add "repo" tool ######################################################################################################
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo

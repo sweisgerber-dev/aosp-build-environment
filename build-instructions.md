@@ -6,7 +6,7 @@
 
 
 ```bash
-docker build -t aosp-build-environment:latest .
+docker build -t aosp-build-environment:aosp-7.1 .
 ```
 
 OR execute the `build.sh` script.
@@ -17,7 +17,7 @@ OR execute the `build.sh` script.
 
 ```bash
 docker run -ti \
-    --hostname aosp-6-0 \
+    --hostname aosp-7-1 \
     --volume /HOST/PATH/TO/ANDROID/CHECKOUT:/aosp/android-VERSION \
     -e LOCAL_USER_ID=`id -u $USER` \
     -e LOCAL_GROUP_ID=`id -g $USER` \
@@ -35,8 +35,8 @@ OR modify the `run.sh` script.
 
 
 ```bash
-cd aosp-6.0/
-yes | repo init -u https://android.googlesource.com/platform/manifest -b android-6.0.1_r62
+cd aosp-7.1/
+yes | repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.1_r6
 repo sync
 source build/envsetup.sh
 lunch aosp_x86_64-eng # lunch aosp_arm64-eng

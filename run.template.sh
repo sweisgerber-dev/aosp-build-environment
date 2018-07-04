@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-HOSTNAME="aosp-6-0"
-HOST_PATH_1="/PATH/TO/aosp-6.0"
-DOCKER_PATH_1="/aosp/aosp-6.0"
+HOSTNAME="aosp-7-1"
+HOST_PATH_1="/PATH/TO/aosp-7.1"
+DOCKER_PATH_1="/aosp/aosp-7.1"
 
 docker run -ti \
     --hostname ${HOSTNAME} \
