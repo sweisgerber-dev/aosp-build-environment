@@ -8,7 +8,9 @@
 
 > Currently supported versions:
 
-- AOSP 6.0 Marshmallow
+- AOSP 6.0 Marshmallow (Branch: `aosp-6.0`)
+- AOSP 7.0 Nougat (Branch: `aosp-7.0`)
+- AOSP 7.1 Nougat (Branch: `aosp-7.1`)
 
 ## Used Ressource
 
